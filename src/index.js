@@ -43,7 +43,7 @@ const init = async () => {
             
                 if(isSuccess) {
                     const response = h.response({
-                        status: 'Success',
+                        status: 'success',
                         message: 'Catatan berhasil ditambahkan',
                         data: {
                             noteId: id,
@@ -65,11 +65,35 @@ const init = async () => {
             path: '/notes',
             handler: () => ({
             
-                    status: 'succes',
+                    status: 'success',
                     data: {
                         notes,
                     }
         })},
+        {
+            method: 'GET',
+            path: '/notes/{id}',
+            handler: (req, h) => {
+                const { id } = req.params;
+
+                const note = notes.filter((n) => n.id ===id)[0];
+
+                if (note !== undefined) {
+                    return {
+                        status: 'success',
+                        data: {
+                            note,
+                        },
+                    };
+                }    
+                    const response = h.response({
+                        status: 'fail',
+                        message: 'Catatan tidak ditemukan',
+                    });
+                    response.code(404);
+                    return response
+                }
+            },
         {
             method: 'PUT',
             path: '/notes/{id}',
